@@ -45,7 +45,7 @@ int main() {
     /// Exemplu:
     /// std::ifstream fis("date.txt");
     /// for(int i = 0; i < nr2; ++i)
-    ///     fis >> v2[i];hfhasfja
+    ///     fis >> v2[i];
     ///
     ///////////////////////////////////////////////////////////////////////////
     ///                Exemplu de utilizare cod generat                     ///
