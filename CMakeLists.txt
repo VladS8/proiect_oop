@@ -10,8 +10,15 @@ project(oop)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+
+set(SQLITE_DIR ${PROJECT_SOURCE_DIR}/bd)
+include_directories(${SQLITE_DIR})
 
 include(cmake/Options.cmake)
+
 
 ###############################################################################
 
@@ -38,21 +45,36 @@ include(cmake/Options.cmake)
 # external dependencies with find_package
 
 # find_package(Threads REQUIRED)
+find_package(Qt6 REQUIRED COMPONENTS Core Widgets Sql)
+
+include_directories(${PROJECT_SOURCE_DIR}/bd)
 
 ###############################################################################
 
 # NOTE: update executable name in .github/workflows/cmake.yml:25 when changing name here
 add_executable(${PROJECT_NAME}
-    main.cpp
+    "main.cpp"
     generated/src/Helper.cpp
+        sources/LoginWindow.cpp
+        headers/LoginWindow.h
+        ${SQLITE_DIR}/sqlite3.c
+        sources/DataBaseHandler.cpp
+        headers/DataBaseHandler.h
+        headers/RegisterWindow.h
+        sources/RegisterWindow.cpp
+        headers/PanelWindowElev.h
+        sources/PanelWindowElev.cpp
 )
 
-include(cmake/CompilerFlags.cmake)
 
+
+ include_directories(${PROJECT_SOURCE_DIR}/path/to/header)
+include(cmake/CompilerFlags.cmake)
 ###############################################################################
 
 # use SYSTEM so cppcheck and clang-tidy do not report warnings from these directories
 target_include_directories(${PROJECT_NAME} SYSTEM PRIVATE generated/include)
+target_link_libraries(${PROJECT_NAME} Qt6::Core Qt6::Sql Qt6::Widgets)
 # target_include_directories(${PROJECT_NAME} SYSTEM PRIVATE ext/<SomeHppLib>/include)
 # target_include_directories(${PROJECT_NAME} SYSTEM PRIVATE ${<SomeLib>_SOURCE_DIR}/include)
 # target_link_directories(${PROJECT_NAME} PRIVATE ${<SomeLib>_BINARY_DIR}/lib)
@@ -62,6 +84,8 @@ target_include_directories(${PROJECT_NAME} SYSTEM PRIVATE generated/include)
 
 # copy binaries to "bin" folder; these are uploaded as artifacts on each release
 # DESTINATION_DIR is set as "bin" in cmake/Options.cmake:6
+
+
 install(TARGETS ${PROJECT_NAME} DESTINATION ${DESTINATION_DIR})
 if(APPLE)
     install(FILES launcher.command DESTINATION ${DESTINATION_DIR})

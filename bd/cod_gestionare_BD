@@ -1,0 +1,42 @@
+######################################
+PASI DUPA CREEA TABELELOR IN main.cpp:
+######################################
+
+CREATE TRIGGER RestrictNota/RestrictAbsenta
+    BEFORE INSERT ON nota/absenta
+    FOR EACH ROW
+BEGIN
+    -- Verifică dacă materia asociată cu nota există pentru clasa elevului
+    SELECT CASE
+               WHEN NOT EXISTS (
+                   SELECT 1
+                   FROM clasa_materie
+                   WHERE ID_CLASA = (SELECT ID_CLASA FROM elev WHERE NR_MATRICOL = NEW.NR_MATRICOL)
+                     AND ID_MATERIE = NEW.ID_MATERIE
+               ) THEN
+                   RAISE (ABORT, 'Elevul nu are aceasta materie asociata clasei sale.')
+               END;
+END;
+
+----------------------------------------------------------------------------------------------------------
+
+PRAGMA foreign_keys = ON;
+
+CREATE TABLE materie_temp (
+                              ID INTEGER PRIMARY KEY AUTOINCREMENT,
+                              NUME VARCHAR(100) NOT NULL,
+                              ID_PROFESOR INTEGER,
+                              FOREIGN KEY (ID_PROFESOR) REFERENCES profesor(ID) ON DELETE SET NULL ON UPDATE CASCADE
+);
+
+INSERT INTO materie_temp (ID, NUME)
+SELECT ID, NUME FROM materie;
+
+drop TABLE materie;
+
+ALTER TABLE materie_temp RENAME TO materie;
+
+PRAGMA foreign_keys = OFF;
+
+
+----------------------------------------------------------------------------------------------------------
