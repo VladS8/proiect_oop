@@ -74,7 +74,7 @@ include(cmake/CompilerFlags.cmake)
 
 # use SYSTEM so cppcheck and clang-tidy do not report warnings from these directories
 target_include_directories(${PROJECT_NAME} SYSTEM PRIVATE generated/include)
-target_link_libraries(${PROJECT_NAME} Qt6::Core Qt6::Sql Qt6::Widgets)
+target_link_libraries(${PROJECT_NAME} Qt6::Core Qt6::Sql Qt6::Widgets )
 # target_include_directories(${PROJECT_NAME} SYSTEM PRIVATE ext/<SomeHppLib>/include)
 # target_include_directories(${PROJECT_NAME} SYSTEM PRIVATE ${<SomeLib>_SOURCE_DIR}/include)
 # target_link_directories(${PROJECT_NAME} PRIVATE ${<SomeLib>_BINARY_DIR}/lib)
@@ -84,6 +84,8 @@ target_link_libraries(${PROJECT_NAME} Qt6::Core Qt6::Sql Qt6::Widgets)
 
 # copy binaries to "bin" folder; these are uploaded as artifacts on each release
 # DESTINATION_DIR is set as "bin" in cmake/Options.cmake:6
+
+
 
 
 install(TARGETS ${PROJECT_NAME} DESTINATION ${DESTINATION_DIR})

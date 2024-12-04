@@ -1,6 +1,6 @@
 #ifndef PANELWINDOWELEV_H
 #define PANELWINDOWELEV_H
-
+#include <stdexcept>
 #include <QMainWindow>
 #include <QGridLayout>
 #include <QLabel>

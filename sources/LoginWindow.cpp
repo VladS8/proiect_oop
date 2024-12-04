@@ -100,49 +100,49 @@ LoginWindow::LoginWindow(QWidget *parent)
 
 
 void LoginWindow::onPushButtonClicked() {
+    try {
+        QSqlDatabase sqlitedb = QSqlDatabase::addDatabase("QSQLITE");
+        sqlitedb.setDatabaseName("C:/Users/Vlad/Desktop/bazadedate1/proiect_oop_bun3/bd/test.db");
 
-    QSqlDatabase sqlitedb = QSqlDatabase::addDatabase("QSQLITE");
-    sqlitedb.setDatabaseName("C:/Users/Vlad/Desktop/bazadedate1/proiect_oop_bun3/bd/test.db");
+        if (!sqlitedb.open()) {
+            throw std::runtime_error("Failed to open the database.");
+        }
 
-    const QString email = m_emailLineEdit->text();
-    const QString password = m_passwordLineEdit->text();
+        const QString email = m_emailLineEdit->text();
+        const QString password = m_passwordLineEdit->text();
 
-    if (sqlitedb.open()) {
         QSqlQuery query(sqlitedb);
-
-
         query.prepare(
             "SELECT elev.PRENUME, clasa.NUME "
             "FROM login_credential, clasa "
             "JOIN elev ON login_credential.NR_MATRICOL_ELEV = elev.NR_MATRICOL "
             "WHERE login_credential.EMAIL = :email AND login_credential.PASSWORD = :password AND elev.ID_CLASA = clasa.ID"
         );
-
-
-
         query.bindValue(":email", email);
         query.bindValue(":password", password);
 
-        if (query.exec()) {
-            if (query.next()) {
-                QString numeElev = query.value("elev.PRENUME").toString();
-                QString clasaElev = query.value("clasa.NUME").toString();
-                auto *panel_window_elev = new PanelWindowElev(this, numeElev, clasaElev);
-                panel_window_elev->show();
-                this->hide();
-
-            } else {
-                m_resultLabel->setText("Invalid email or password.");
-            }
-        } else {
-            m_resultLabel->setText("Login failed (database error).");
+        if (!query.exec()) {
+            throw std::runtime_error("Failed to execute the query.");
         }
-    } else {
-        m_resultLabel->setText("Connection failed!");
-    }
 
-    sqlitedb.close();
+        if (query.next()) {
+            QString numeElev = query.value("elev.PRENUME").toString();
+            QString clasaElev = query.value("clasa.NUME").toString();
+            auto *panel_window_elev = new PanelWindowElev(this, numeElev, clasaElev);
+            panel_window_elev->show();
+            this->hide();
+        } else {
+            m_resultLabel->setText("Invalid email or password.");
+        }
+
+        sqlitedb.close();
+    } catch (const std::runtime_error &e) {
+        m_resultLabel->setText(QString("Error: %1").arg(e.what()));
+    } catch (...) {
+        m_resultLabel->setText("An unknown error occurred.");
+    }
 }
+
 
 
 

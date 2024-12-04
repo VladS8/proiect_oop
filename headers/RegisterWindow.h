@@ -13,7 +13,7 @@
 
 
 
-class RegisterWindow : public QMainWindow{
+class RegisterWindow final : public QMainWindow{
     Q_OBJECT
 
 private:

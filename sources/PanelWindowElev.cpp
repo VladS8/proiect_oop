@@ -14,6 +14,14 @@
 PanelWindowElev::PanelWindowElev(QWidget *parent, const QString &numeElev, const QString &clasaElev)
     : QMainWindow(parent)
 {
+
+    // if (numeElev.isEmpty()) {
+    //     throw std::invalid_argument("Numele elevului nu poate fi gol!");
+    // }
+    // if (clasaElev.isEmpty()) {
+    //     throw std::invalid_argument("Clasa elevului nu poate fi goală!");
+    // }
+
     setFixedSize(1200, 700);
 //******************************************************************************************
     mainWidget = new QWidget(this);

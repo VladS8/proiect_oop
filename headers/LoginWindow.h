@@ -31,4 +31,4 @@ public:
 
 };
 
-#endif  LOGINWINDOW_H
+#endif
