@@ -65,7 +65,7 @@ LoginWindow::LoginWindow(QWidget *parent)
     m_loginButton = new QPushButton("Intra in cont", this);
     m_loginButton->setFixedWidth(150);
     m_loginButton->setFixedHeight(50);
-    m_loginButton->setStyleSheet("font-size: 20px; font-weight: bold;");
+    m_loginButton->setStyleSheet("font-size: 21px; font-weight: bold;");
     layout->addWidget(m_loginButton, 0, Qt::AlignHCenter);
 
 //-------------------------------------------------------------------
