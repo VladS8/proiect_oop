@@ -75,7 +75,8 @@ RegisterWindow::RegisterWindow(QWidget *parent)
     m_createAccountButton->setStyleSheet("font-size: 20px; font-weight: bold;");
     layout->addWidget(m_createAccountButton, 0, Qt::AlignHCenter);
 //-------------------------------------------------------------------
-
+    m_resultLabel_reg = new QLabel(this);
+    layout->addWidget(m_resultLabel_reg);
 //-------------------------------------------------------------------
     m_gotologinButton = new QPushButton("Inapoi la pagina de logare", this);
     m_gotologinButton->setFixedWidth(200);
@@ -126,6 +127,8 @@ void RegisterWindow::onPushButtonClicked() const {
 
                 if (query.exec()) {
                     m_resultLabel_reg->setText("Account successfully created!");
+                    const QString dataNotificare = QString("New account created: %1, ID: %2").arg(email).arg(nr_matricol);
+                    notifyObserver(dataNotificare);
                 } else {
                     m_resultLabel_reg->setText("Failed to create account.");
                 }

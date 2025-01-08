@@ -9,7 +9,6 @@ private:
     sqlite3* db;
     std::string dbPath;
 
-    //static:
 public:
     explicit DatabaseHandler(const std::string& path);
     ~DatabaseHandler();

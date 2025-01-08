@@ -11,9 +11,10 @@
 #include <QSqlQuery>
 #include <QHBoxLayout>
 
+#include "Subject.h"
 
 
-class RegisterWindow final : public QMainWindow{
+class RegisterWindow : public QMainWindow, public Subject{
     Q_OBJECT
 
 private:

@@ -10,12 +10,13 @@ project(oop)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
-set(CMAKE_AUTOUIC ON)
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
 
 set(SQLITE_DIR ${PROJECT_SOURCE_DIR}/bd)
 include_directories(${SQLITE_DIR})
+
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
 
 include(cmake/Options.cmake)
 
@@ -64,6 +65,19 @@ add_executable(${PROJECT_NAME}
         sources/RegisterWindow.cpp
         headers/PanelWindowElev.h
         sources/PanelWindowElev.cpp
+        headers/Elev.h
+        headers/UserBase.h
+        headers/Profesor.h
+        headers/PanelWindowProfesor.h
+        sources/PanelWindowProfesor.cpp
+        headers/Diriginte.h
+        headers/PanelWindowDiriginte.h
+        sources/PanelWindowDiriginte.cpp
+        headers/Observer.h
+        headers/Subject.h
+        sources/Subject.cpp
+        headers/ManagerElevi.h
+        headers/DisplayElevi.h
 )
 
 

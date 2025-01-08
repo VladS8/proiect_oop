@@ -1,34 +1,37 @@
-    #ifndef LOGININDOW_H
+#ifndef LOGINWINDOW_H
 #define LOGINWINDOW_H
-
 #include <QMainWindow>
 #include <QPushButton>
 #include <QLineEdit>
 #include <QLabel>
-#include <QSqlQuery>
 #include <QHBoxLayout>
+#include <memory>
 
-class LoginWindow : public QMainWindow
+#include "Observer.h"
+
+class LoginWindow final : public QMainWindow, public Observer
 {
     Q_OBJECT
 
 private:
-    QPushButton *m_loginButton;
-    QLineEdit *m_emailLineEdit;
-    QLineEdit *m_passwordLineEdit;
-    QLabel *m_resultLabel;
-    QLabel *m_textLabel;
-    QPushButton *m_gotoregisterButton;
-    QPushButton *m_togglePasswordButton;
-    QHBoxLayout *passwordLayout;
+    std::unique_ptr<QPushButton> m_loginButton;
+    std::unique_ptr<QLineEdit> m_emailLineEdit;
+    std::unique_ptr<QLineEdit> m_passwordLineEdit;
+    std::unique_ptr<QLabel> m_resultLabel;
+    std::unique_ptr<QLabel> m_textLabel;
+    std::unique_ptr<QPushButton> m_gotoregisterButton;
+    std::unique_ptr<QPushButton> m_togglePasswordButton;
+    std::unique_ptr<QHBoxLayout> passwordLayout;
 
 public:
     explicit LoginWindow(QWidget *parent = nullptr);
+    void update(const QString &data) override;
     ~LoginWindow() override;
 
     private slots:
         void onPushButtonClicked();
 
+
 };
 
-#endif
+#endif // LOGINWINDOW_H

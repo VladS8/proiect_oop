@@ -1,5 +1,6 @@
-#ifndef PANELWINDOWELEV_H
-#define PANELWINDOWELEV_H
+#ifndef PANELWINDOWPROFESOR_H
+#define PANELWINDOWPROFESOR_H
+#include <stdexcept>
 #include <QMainWindow>
 #include <QGridLayout>
 #include <QLabel>
@@ -7,7 +8,8 @@
 #include <QStackedWidget>
 #include <QPushButton>
 
-class PanelWindowElev : public QMainWindow
+
+class PanelWindowProfesor : public QMainWindow
 {
     Q_OBJECT
 
@@ -30,6 +32,8 @@ private:
     QFrame *m_leftWidget;
     QVBoxLayout *m_leftLayout;
     QPushButton *m_showGradesButton;
+    QPushButton *m_manageStudentsButton;
+    QPushButton *m_showStudentsButton;
 
     // ICON FRAME
     QFrame *m_iconWidget;
@@ -38,12 +42,11 @@ private:
 
 
 public:
-    explicit PanelWindowElev(QWidget *parent = nullptr, const QString &numeElev = "", const QString &clasaElev = "");
-    ~PanelWindowElev() override;
-    void addGradeOnButtonClicked(int nrMatricol, int idMaterie, int valoareNota, const QString &dataNota);
+    explicit PanelWindowProfesor(QWidget *parent = nullptr, const QString &numeProfesor = "", const QString &materieProfesor = "");
+    ~PanelWindowProfesor() override;
 
     private slots:
-        void showGradesOnButtonClicked();
+        void showStudentsOnPushButtonClicked(const QString& idDiriginte);
 };
 
-#endif // PANELWINDOWELEV_H
+#endif // PANELWINDOWPROFESOR_H

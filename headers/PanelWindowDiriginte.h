@@ -1,5 +1,5 @@
-#ifndef PANELWINDOWELEV_H
-#define PANELWINDOWELEV_H
+#ifndef PANELWINDOWDIRIGINTE_H
+#define PANELWINDOWDIRIGINTE_H
 #include <QMainWindow>
 #include <QGridLayout>
 #include <QLabel>
@@ -7,11 +7,14 @@
 #include <QStackedWidget>
 #include <QPushButton>
 
-class PanelWindowElev : public QMainWindow
-{
+
+#include "Subject.h"
+
+class PanelWindowDiriginte : public QMainWindow {
     Q_OBJECT
 
 private:
+    QString m_idDiriginte;
     QWidget *mainWidget;
     QGridLayout *mainLayout;
 
@@ -29,21 +32,20 @@ private:
     // LEFT FRAME
     QFrame *m_leftWidget;
     QVBoxLayout *m_leftLayout;
-    QPushButton *m_showGradesButton;
+    QPushButton *m_showStudentsButton;
 
     // ICON FRAME
     QFrame *m_iconWidget;
     QVBoxLayout *m_iconLayout;
     QLabel *m_icon;
 
-
 public:
-    explicit PanelWindowElev(QWidget *parent = nullptr, const QString &numeElev = "", const QString &clasaElev = "");
-    ~PanelWindowElev() override;
-    void addGradeOnButtonClicked(int nrMatricol, int idMaterie, int valoareNota, const QString &dataNota);
+    explicit PanelWindowDiriginte(QWidget *parent = nullptr, const QString &numeDiriginte = "", const QString &numeClasa = " ", const QString &idDiriginte = " ");
+    ~PanelWindowDiriginte() override;
 
     private slots:
-        void showGradesOnButtonClicked();
+        void showStudentsOnPushButtonClicked(const QString& idDiriginte);
 };
 
-#endif // PANELWINDOWELEV_H
+
+#endif //PANELWINDOWDIRIGINTE_H

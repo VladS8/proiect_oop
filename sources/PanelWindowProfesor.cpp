@@ -1,20 +1,16 @@
-#include "../headers/PanelWindowElev.h"
-#include "../headers/LoginWindow.h"
+#include "../headers/PanelWindowProfesor.h"
 #include <QLabel>
 #include <QFrame>
 #include <QGridLayout>
+#include <QMessageBox>
+#include <QSqlError>
 #include <QVBoxLayout>
 #include <QStackedWidget>
 #include <QSqlQuery>
-#include <QSqlError>
 #include <QString>
 #include <QWidget>
-#include <QMessageBox>
 
-#include "../headers/DisplayElevi.h"
-#include "../headers/ManagerElevi.h"
-
-PanelWindowElev::PanelWindowElev(QWidget *parent, const QString &numeElev, const QString &clasaElev)
+PanelWindowProfesor::PanelWindowProfesor(QWidget *parent, const QString &numeProfesor, const QString &materieProfesor)
     : QMainWindow(parent)
 {
     setFixedSize(1200, 700);
@@ -31,7 +27,7 @@ PanelWindowElev::PanelWindowElev(QWidget *parent, const QString &numeElev, const
     m_topWidget->setFixedWidth(1050);
     m_topWidget->setFixedHeight(140);
 
-    m_testLabel2 = new QLabel("test", this);
+    m_testLabel2 = new QLabel("Informatii Profesor", this);
     m_testLabel2->setFixedWidth(120);
     m_testLabel2->setFixedHeight(80);
     m_testLabel2->setAlignment(Qt::AlignCenter);
@@ -39,17 +35,17 @@ PanelWindowElev::PanelWindowElev(QWidget *parent, const QString &numeElev, const
     m_topLayout->addWidget(m_testLabel2, 0, Qt::AlignRight | Qt::AlignCenter);
 
     m_testLabel = new QLabel(this);
-    m_testLabel->setText(QString("Clasa: \n %1").arg(clasaElev));
+    m_testLabel->setText(QString("Clasa: \n %1").arg(materieProfesor));
     m_testLabel->setFixedWidth(120);
     m_testLabel->setFixedHeight(80);
     m_testLabel->setAlignment(Qt::AlignCenter);
     m_testLabel->setStyleSheet("font-size: 18px; font-weight: bold; border: 1px solid black;");
-    m_topLayout->addSpacerItem(new QSpacerItem(-300, 0));
+    m_topLayout->addSpacerItem(new QSpacerItem(0, 0));
     m_topLayout->addWidget(m_testLabel, 0, Qt::AlignRight | Qt::AlignCenter);
-    m_topLayout->addSpacerItem(new QSpacerItem(-300, 0));
+    m_topLayout->addSpacerItem(new QSpacerItem(0, 0));
 
     m_welcomeMessage = new QLabel(this);
-    m_welcomeMessage->setText(QString("Bine ai venit \n %1!").arg(numeElev));
+    m_welcomeMessage->setText(QString("Bine ai venit, \n %1!").arg(numeProfesor));
     m_welcomeMessage->setFixedWidth(120);
     m_welcomeMessage->setFixedHeight(80);
     m_welcomeMessage->setAlignment(Qt::AlignCenter);
@@ -57,7 +53,15 @@ PanelWindowElev::PanelWindowElev(QWidget *parent, const QString &numeElev, const
     m_topLayout->addWidget(m_welcomeMessage, 0, Qt::AlignRight | Qt::AlignCenter);
     m_topLayout->addSpacerItem(new QSpacerItem(25, 0));
 
+    m_showStudentsButton = new QPushButton("Vezi elevii", this);
+    m_showStudentsButton->setFixedWidth(80);
+    m_showStudentsButton->setFixedHeight(50);
+    m_showStudentsButton->setStyleSheet("border: 1px solid black;");
+    m_leftLayout->addSpacerItem(new QSpacerItem(0, 25));
+    m_leftLayout->addWidget(m_showStudentsButton, 0, Qt::AlignTop | Qt::AlignCenter);
+
     // LEFT FRAME
+
     m_leftWidget = new QFrame();
     m_leftLayout = new QVBoxLayout(m_leftWidget);
     m_leftWidget->setFrameStyle(QFrame::Box | QFrame::Raised);
@@ -72,14 +76,17 @@ PanelWindowElev::PanelWindowElev(QWidget *parent, const QString &numeElev, const
     m_leftLayout->addSpacerItem(new QSpacerItem(0, 25));
     m_leftLayout->addWidget(m_showGradesButton, 0, Qt::AlignTop | Qt::AlignCenter);
 
-    /*m_showGradesButton = new QPushButton("Afișează note", this);
-    m_showGradesButton->setFixedWidth(100);
-    m_showGradesButton->setFixedHeight(50);
-    m_showGradesButton->setStyleSheet("border: 1px solid black;");
-    m_leftLayout->addWidget(m_showGradesButton, 0, Qt::AlignTop | Qt::AlignCenter);*/
+    m_manageStudentsButton = new QPushButton("Gestioneaza elevii", this);
+    m_manageStudentsButton->setFixedWidth(100);
+    m_manageStudentsButton->setFixedHeight(50);
+    m_manageStudentsButton->setStyleSheet("border: 1px solid black;");
+    m_leftLayout->addWidget(m_manageStudentsButton, 0, Qt::AlignTop | Qt::AlignCenter);
 
-    // Connect showGradesButton to the slot
-    connect(m_showGradesButton, &QPushButton::clicked, this, &PanelWindowElev::showGradesOnButtonClicked);
+
+    connect(m_showStudentsButton, &QPushButton::clicked, this, [this, materieProfesor]() {
+        showStudentsOnPushButtonClicked(materieProfesor);
+    });
+
 
     // ICON FRAME
     m_iconWidget = new QFrame();
@@ -90,7 +97,7 @@ PanelWindowElev::PanelWindowElev(QWidget *parent, const QString &numeElev, const
     m_iconWidget->setFixedHeight(130);
 
     m_icon = new QLabel();
-    m_icon->setText("📖");
+    m_icon->setText("🎓");
     m_icon->setFixedWidth(120);
     m_icon->setFixedHeight(120);
     m_icon->setAlignment(Qt::AlignCenter);
@@ -103,7 +110,7 @@ PanelWindowElev::PanelWindowElev(QWidget *parent, const QString &numeElev, const
     m_indexWidget->setFixedWidth(1040);
     m_indexWidget->setFixedHeight(540);
 
-    m_indexLabel = new QLabel("Index View");
+    m_indexLabel = new QLabel("Bun venit în tabloul Profesorului!");
     m_indexLabel->setAlignment(Qt::AlignCenter);
     m_indexLabel->setStyleSheet("font-size: 20px;");
     m_indexWidget->addWidget(m_indexLabel);
@@ -119,65 +126,50 @@ PanelWindowElev::PanelWindowElev(QWidget *parent, const QString &numeElev, const
     setCentralWidget(mainWidget);
 }
 
-/*template <typename T>
-T calculateAverage(const std::vector<T>& values) {
-    if (values.empty()) {
-        throw std::invalid_argument("Nu are note");
-    }
-    T sum = std::accumulate(values.begin(), values.end(), static_cast<T>(0));
-    return sum / static_cast<T>(values.size());
-}*/
+void PanelWindowProfesor::showStudentsOnPushButtonClicked(const QString& idDiriginte) {
+    try {
+        QSqlDatabase sqlitedb = QSqlDatabase::addDatabase("QSQLITE", "grades_connection");
+        sqlitedb.setDatabaseName("C:/Users/Vlad/Desktop/bazadedate1/proiect_oop_bun3/bd/test.db");
 
-void PanelWindowElev::showGradesOnButtonClicked()
-{
-   try {
-       QSqlDatabase sqlitedb = QSqlDatabase::addDatabase("QSQLITE", "grades_connection");
-       sqlitedb.setDatabaseName("C:/Users/Vlad/Desktop/bazadedate1/proiect_oop_bun3/bd/test.db");
-
-       if (!sqlitedb.open()) {
-           throw std::runtime_error("Eroare la deschiderea bazei de date!");
-       }
-
-
-           QSqlQuery query(sqlitedb);
-           query.prepare(R"(
+        if (!sqlitedb.open()) {
+            qDebug() << "Eroare la deschiderea bazei de date:" << sqlitedb.lastError().text();
+            throw std::runtime_error("Eroare la deschiderea bazei de date!");
+        }
+        qDebug() << "ID-ul diriginte utilizat este:" << idDiriginte;
+        QSqlQuery query(sqlitedb);
+        query.prepare(R"(
                SELECT
-                   nota.VAL, materie.NUME
+                   elev.NUME, elev.PRENUME
                FROM
-                   materie
-               JOIN
-                   nota ON materie.id = nota.id_materie
-           )");
+                   elev
+            )");
+        query.bindValue(":idDiriginte", idDiriginte);
+        if (!query.exec()) {
+            qDebug() << "Eroare la execuția interogării:" << query.lastError().text();
+            throw std::runtime_error(query.lastError().text().toStdString());
+        }
 
-           if (!query.exec()) {
-               throw std::runtime_error(query.lastError().text().toStdString());
-           }
-
-           QString grades;
-           while (query.next()) {
-               QString materie = query.value("Materie.nume").toString();
-               QString nota = query.value("Nota.val").toString();
-               grades += QString("%1: %2\n").arg(materie, nota);
-           }
-
-           if (grades.isEmpty()) {
-               grades = "Nu s-au găsit note pentru acest elev.";
-           }
-
-           auto *manager = new ManagerElevi();
-           auto *display = new DisplayElevi(m_indexLabel);
-           manager->addObserver(display);
-           manager->updateStudentList(grades);
+        QString elevi;
+        while (query.next()) {
+            QString numeElev = query.value("NUME").toString();
+            QString prenumeElev = query.value("PRENUME").toString();
+            elevi += QString("%1 %2\n").arg(numeElev, prenumeElev);
+        }
 
 
-       sqlitedb.close();
-   } catch (const std::exception &ex) {
-       QMessageBox::critical(this, "Eroare", QString("A apărut o eroare: %1").arg(ex.what()));
-   } catch (...) {
-       QMessageBox::critical(this, "Eroare", "A apărut o eroare necunoscută.");
-   }
+        if (elevi.isEmpty()) {
+            m_indexLabel->setText("Nu există elevi în această clasă.");
+        } else {
+            m_indexLabel->setText(elevi);
+        }
+
+        sqlitedb.close();
+
+    } catch (const std::exception &ex) {
+        QMessageBox::critical(this, "Eroare", QString("A apărut o eroare: %1").arg(ex.what()));
+    } catch (...) {
+        QMessageBox::critical(this, "Eroare", "A apărut o eroare necunoscută.");
+    }
 }
 
-
-
-PanelWindowElev::~PanelWindowElev() = default;
+PanelWindowProfesor::~PanelWindowProfesor() = default;
