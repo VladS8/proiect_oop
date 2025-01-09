@@ -1,63 +1,60 @@
-# Titlu proiect
+# Proiect Catalog Digital
 
 ## Descriere proiect
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
-## Milestone #0
 
-- [ ] Nume proiect (poate fi schimbat ulterior)
-- [ ] Scurtă descriere a temei alese, ce v-ați propus să implementați
 
 ## Milestone #1
 
-#### Cerințe
-- [ ] definirea a minim **3-4 clase** folosind compunere cu clasele definite de voi
-- [ ] constructori de inițializare cu parametri
-- [ ] pentru o aceeași (singură) clasă: constructor de copiere, `operator=` de copiere, destructor
-- [ ] `operator<<` pentru toate clasele pentru afișare (std::ostream)
-- [ ] cât mai multe `const` (unde este cazul)
-- [ ] implementarea a minim 3 funcții membru publice pentru funcționalități specifice temei alese, dintre care cel puțin 1-2 funcții mai complexe
-  - nu doar citiri/afișări sau adăugat/șters elemente într-un/dintr-un vector
-- [ ] scenariu de utilizare a claselor definite:
-  - preferabil sub formă de teste unitare, mai ales dacă vorbim de aplicații consolă 
-  - crearea de obiecte și apelarea tuturor funcțiilor membru publice în main
-  - vor fi adăugate în fișierul `tastatura.txt` DOAR exemple de date de intrare de la tastatură (dacă există); dacă aveți nevoie de date din fișiere, creați alte fișiere separat
-- [ ] tag de `git`: de exemplu `v0.1`
-- [ ] serviciu de integrare continuă (CI); exemplu: GitHub Actions
+In acest Milestone am inceput implementarea claselor de baza folosite in proiect,
+dar care ulterior au fost inlocuite datorita faptului ca am schimbat perspectiva
+proiectului si am vrut sa incerc sa folosesc o baza de date in spate si o librarie(Qt)
+pentru interfata.
 
 ## Milestone #2
+Milestone-ul 2 l-am inceput prin adaugarea librariei Qt, iar mai apoi a plugin-ului
+SqliteBrowser in aplicatia Clion.
+Prima clasa creeata a fost DataBaseHandler, o clasa in mare parte folosita ca sa pot
+incepe sa inteleg cum functioneaza acestea intr-un cod c++. 
+Sqlitebrowser functioneaza pe cod C, fapt pentru care apare pe GitHub ca folosesc
+99.4% cod C.
+Clasa poate creea tabele, imi deschide baza de date, o inchide si contine un constructor,
 
-#### Cerințe
-- [ ] separarea codului din clase în `.h` (sau `.hpp`) și `.cpp`
-- [ ] moșteniri:
-  - minim o clasă de bază și **3 clase derivate** din aceeași ierarhie
-  - ierarhia trebuie să fie cu bază proprie, nu derivată dintr-o clasă predefinită
-  - [ ] funcții virtuale (pure) apelate prin pointeri de bază din clasa care conține atributul de tip pointer de bază
-    - minim o funcție virtuală va fi **specifică temei** (e.g. nu simple citiri/afișări)
-    - constructori virtuali (clone): sunt necesari, dar nu se consideră funcții specifice temei
-    - afișare virtuală, interfață non-virtuală
-  - [ ] apelarea constructorului din clasa de bază din constructori din derivate
-  - [ ] clasă cu atribut de tip pointer la o clasă de bază cu derivate; aici apelați funcțiile virtuale prin pointer de bază, eventual prin interfața non-virtuală din bază
-    - [ ] suprascris cc/op= pentru copieri/atribuiri corecte, copy and swap
-    - [ ] `dynamic_cast`/`std::dynamic_pointer_cast` pentru downcast cu sens
-    - [ ] smart pointers (recomandat, opțional)
-- [ ] excepții
-  - [ ] ierarhie proprie cu baza `std::exception` sau derivată din `std::exception`; minim **3** clase pentru erori specifice
-  - [ ] utilizare cu sens: de exemplu, `throw` în constructor (sau funcție care întoarce un obiect), `try`/`catch` în `main`
-  - această ierarhie va fi complet independentă de ierarhia cu funcții virtuale
-- [ ] funcții și atribute `static`
-- [ ] STL
-- [ ] cât mai multe `const`
-- [ ] funcții *de nivel înalt*, de eliminat cât mai mulți getters/setters/funcții low-level
-- [ ] tag de `git`: de exemplu `v0.2`
+
+
+Mai apoi am inceput prin introducerea clasei LoginWindow, care este folosita
+ca un fel de MainWindow, deoarece e primul window care se deschide cand rulez proiectul
+si are cele mai multe implementari in ea. In loginWindow am construit butoane care imi
+fac interogari pe baza de date si ma pot trimite in restul ferestrelor. Aceasta fereastra
+este mereu deschisa cand programul ruleaza deoarece folosesc functia hide() pe aceasta
+cand deschid restul de ferestre cu show()
+
+Similiar pentru registerWindow in loc sa fac interogari pe baza de date fac o insertie sql
+pentru a imi creea tabelele direct din interfata.
+
+Urmatoarea clasa creeate a fost PanelWindowElev care voiam sa o folosesc ca o pagina
+principala in proiect in care sa am toate functionalitatile. Aceasta a ajuns sa fie
+o clasa destul de simpla care contine cateva butoane si interogari sql.
+
 
 ## Milestone #3
 
-#### Cerințe
-- [ ] 2 șabloane de proiectare (design patterns)
-- [ ] o clasă șablon cu sens; minim **2 instanțieri**
-  - [ ] preferabil și o funcție șablon (template) cu sens; minim 2 instanțieri
-- [ ] tag de `git`: de exemplu `v0.3` sau `v1.0`
+In Milestone 3 am adaugata clasa de baza UserBase cu clasele derivate din aceasta:
+Profesor, Elev, Diriginte. Aceste clase le folosesc in LoginWindow pentru a indentifica
+dupa email ce fel de user incearca sa se logheze la panou. prin introducerea unui email
+de tip vlad@gmail.com - email de elev mi se deschide PanelWindowElev, la fel si pentru 
+restul entitatilor(Profesor, Diriginte).
+
+Tot in acest Milestone am incercat sa rezolv cateva leak-uri de memorie si erori gasite
+prin cod. Si am introdus design pattern-ul (Observer). Acest pattern imi anunta pagina
+LoginWindow atunci cand un cont nou este creeat in RegisterWindow, clasele creeate pentru
+folosirea pattern-ului Observer sunt, Subject folosita in RegisterWindow si Observer folosita
+in LoginWindow.
+
 
 ## Resurse
-- adăugați trimiteri către resursele externe care v-au ajutat sau pe care le-ați folosit
+https://github.com/
+https://www.w3schools.com/
+https://chatgpt.com/
+https://stackoverflow.com/
+AI Assistant-ul din Clion pentru crearea documentatiei pentru cod

@@ -30,6 +30,7 @@ private:
     QFrame *m_leftWidget;
     QVBoxLayout *m_leftLayout;
     QPushButton *m_showGradesButton;
+    QLabel *m_leftLabel;
 
     // ICON FRAME
     QFrame *m_iconWidget;
@@ -38,9 +39,20 @@ private:
 
 
 public:
+    /**
+     * @brief Constructs a new PanelWindowElev object.
+     *
+     * This constructor initializes a new instance of the PanelWindowElev class,
+     * which is a QMainWindow object designed for a specific student's panel.
+     *
+     * @param parent The parent widget for this QMainWindow. Can be nullptr.
+     * @param numeElev The name of the student associated with this panel.
+     * @param clasaElev The class or grade level of the student.
+     *
+     * @return A new instance of the PanelWindowElev class.
+     */
     explicit PanelWindowElev(QWidget *parent = nullptr, const QString &numeElev = "", const QString &clasaElev = "");
     ~PanelWindowElev() override;
-    void addGradeOnButtonClicked(int nrMatricol, int idMaterie, int valoareNota, const QString &dataNota);
 
     private slots:
         void showGradesOnButtonClicked();

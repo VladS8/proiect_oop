@@ -4,7 +4,12 @@
 #include "UserBase.h"
 #include <vector>
 #include <string>
-
+/**
+ * @class Diriginte
+ * @brief Class representing a Diriginte user type, derived from UserBase.
+ * The Diriginte class is used to represent a user who acts as a head teacher or class coordinator (Diriginte).
+ * This class extends the base functionality provided by UserBase and includes a unique identifier for the Diriginte.
+ */
 class Diriginte : public UserBase {
 
 private:
@@ -16,7 +21,7 @@ public:
 
     ~Diriginte() override = default;
 
-    std::string getRole() const override {
+    [[nodiscard]] std::string getRole() const override {
         return "Diriginte";
     }
 

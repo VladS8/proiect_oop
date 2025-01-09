@@ -7,7 +7,24 @@
 #include <QLineEdit>
 #include <QStackedWidget>
 #include <QPushButton>
-
+/**
+ * The PanelWindowProfesor class represents a graphical user interface (GUI)
+ * component tailored for use by professors in an educational system.
+ *
+ * This class extends a panel or window component to provide specialized
+ * functionality and features needed for professors to interact with the system.
+ * It may include methods and attributes for displaying professor-specific information,
+ * handling user input, and managing data operations related to the professor's activities.
+ *
+ * Responsibilities of this class may include:
+ * - Displaying relevant information and available functionalities for professors.
+ * - Providing an interface to manage courses, assignments, or student data.
+ * - Capturing and responding to user interactions specific to this user role.
+ * - Ensuring data integrity and accuracy when interfacing with external systems or databases.
+ *
+ * The implementation may rely on additional supporting classes or integrate with
+ * underlying back-end systems to fetch or update necessary data.
+ */
 
 class PanelWindowProfesor : public QMainWindow
 {

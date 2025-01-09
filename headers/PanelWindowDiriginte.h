@@ -7,8 +7,21 @@
 #include <QStackedWidget>
 #include <QPushButton>
 
-
-#include "Subject.h"
+/**
+ * @class PanelWindowDiriginte
+ * @brief Represents a panel window specifically designed for "Diriginte" functionalities.
+ *
+ * This class is used to manage the UI components and functionalities associated with
+ * "Diriginte" (classmaster) operations within an application. It provides necessary methods
+ * and attributes to handle related processes and user interactions.
+ *
+ * The PanelWindowDiriginte class is intended to facilitate the management of data, display
+ * elements, and interactions specific to "Diriginte" tasks while maintaining ease of use
+ * and modularity.
+ *
+ * Potential operations may include data display, updates, interaction handling,
+ * and triggering events related to the classmaster UI elements.
+ */
 
 class PanelWindowDiriginte : public QMainWindow {
     Q_OBJECT

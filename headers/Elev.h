@@ -1,7 +1,15 @@
 #ifndef ELEV_H
 #define ELEV_H
 #include "UserBase.h"
-
+/**
+ * @class Elev
+ * @brief Represents a student user in the system.
+ *
+ * The Elev class is a derived class of UserBase, specifically designed to represent
+ * a student with an associated matriculation number. It extends the functionality
+ * of the UserBase class by specifying the role as "Elev" and storing an additional
+ * field, m_nrMatricol, which identifies the student.
+ */
 class Elev : public UserBase {
 
 private:
@@ -13,7 +21,7 @@ public:
 
     ~Elev() override = default;
 
-    std::string getRole() const override {
+    [[nodiscard]] std::string getRole() const override {
         return "Elev";
     }
 

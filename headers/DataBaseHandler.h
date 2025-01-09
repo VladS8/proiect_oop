@@ -3,7 +3,12 @@
 
 #include <sqlite3.h>
 #include <string>
-
+/**
+     * Constructs a DatabaseHandler object with a specified database file path.
+     * The provided path is used to initialize the database file location.
+     *
+     * @param path The file path to the SQLite database.
+ */
 class DatabaseHandler {
 private:
     sqlite3* db;

@@ -11,8 +11,6 @@
 #include <QWidget>
 #include <QMessageBox>
 
-#include "../headers/DisplayElevi.h"
-#include "../headers/ManagerElevi.h"
 
 PanelWindowElev::PanelWindowElev(QWidget *parent, const QString &numeElev, const QString &clasaElev)
     : QMainWindow(parent)
@@ -155,19 +153,15 @@ void PanelWindowElev::showGradesOnButtonClicked()
 
            QString grades;
            while (query.next()) {
-               QString materie = query.value("Materie.nume").toString();
-               QString nota = query.value("Nota.val").toString();
+               QString materie = query.value("materie.NUME").toString();
+               QString nota = query.value("nota.VAL").toString();
                grades += QString("%1: %2\n").arg(materie, nota);
            }
 
            if (grades.isEmpty()) {
                grades = "Nu s-au găsit note pentru acest elev.";
            }
-
-           auto *manager = new ManagerElevi();
-           auto *display = new DisplayElevi(m_indexLabel);
-           manager->addObserver(display);
-           manager->updateStudentList(grades);
+       m_indexLabel->setText(grades);
 
 
        sqlitedb.close();

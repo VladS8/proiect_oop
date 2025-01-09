@@ -76,7 +76,6 @@ add_executable(${PROJECT_NAME}
         headers/Observer.h
         headers/Subject.h
         sources/Subject.cpp
-        headers/ManagerElevi.h
         headers/DisplayElevi.h
 )
 
